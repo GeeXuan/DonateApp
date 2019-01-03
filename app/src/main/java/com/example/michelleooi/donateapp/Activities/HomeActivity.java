@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if(savedInstanceState == null){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new Activity_Feed()).commit();
+                new FeedFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_newsfeed);
         }
     }
@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch(item.getItemId()){
             case R.id.nav_newsfeed:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new Activity_Feed()).commit();
+                        new FeedFragment()).commit();
                 drawer.closeDrawers();
                 break;
             case R.id.nav_event:

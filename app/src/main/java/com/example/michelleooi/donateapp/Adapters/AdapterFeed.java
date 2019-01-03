@@ -1,18 +1,19 @@
 package com.example.michelleooi.donateapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.michelleooi.donateapp.Activities.Activity_Feed;
-import com.example.michelleooi.donateapp.Activities.HomeActivity;
+import com.example.michelleooi.donateapp.Activities.PopComment;
 import com.example.michelleooi.donateapp.Models.ModelFeed;
 import com.example.michelleooi.donateapp.R;
 
@@ -53,6 +54,12 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
         holder.tv_status.setText(modelFeed.getStatus());
 
         glide.load(modelFeed.getPropic()).into(holder.imgView_proPic);
+        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, PopComment.class));
+            }
+        });
 
         if (modelFeed.getPostpic() == 0) {
             holder.imgView_postPic.setVisibility(View.GONE);
@@ -71,6 +78,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
 
         TextView tv_name, tv_time, tv_likes, tv_comments, tv_status;
         ImageView imgView_proPic, imgView_postPic;
+        RelativeLayout commentBtn = (RelativeLayout)itemView.findViewById(R.id.row_commentbtn);
 
         public MyViewHolder(View itemView) {
             super(itemView);
