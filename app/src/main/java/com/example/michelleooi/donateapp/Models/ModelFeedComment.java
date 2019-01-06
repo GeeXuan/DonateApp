@@ -1,10 +1,10 @@
 package com.example.michelleooi.donateapp.Models;
 
-public class ModelComment {
+public class ModelFeedComment {
     int id, likes, propic;
     String name, time, comments;
 
-    public ModelComment(int id, int likes, int propic, String name, String time, String comments) {
+    public ModelFeedComment(int id, int likes, int propic, String name, String time, String comments) {
         this.id = id;
         this.likes = likes;
         this.propic = propic;

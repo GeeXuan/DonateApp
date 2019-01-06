@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.michelleooi.donateapp.Activities.PopComment;
+import com.example.michelleooi.donateapp.Activities.FeedCommentActivity;
 import com.example.michelleooi.donateapp.Models.ModelFeed;
 import com.example.michelleooi.donateapp.R;
 
@@ -50,14 +50,14 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
         holder.tv_name.setText(modelFeed.getName());
         holder.tv_time.setText(modelFeed.getTime());
         holder.tv_likes.setText(String.valueOf(modelFeed.getLikes()));
-        holder.tv_comments.setText(modelFeed.getComments() + " comments");
+        holder.tv_comments.setText(modelFeed.getComments() + " comment");
         holder.tv_status.setText(modelFeed.getStatus());
 
         glide.load(modelFeed.getPropic()).into(holder.imgView_proPic);
         holder.commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, PopComment.class));
+                context.startActivity(new Intent(context, FeedCommentActivity.class));
             }
         });
 
@@ -78,7 +78,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
 
         TextView tv_name, tv_time, tv_likes, tv_comments, tv_status;
         ImageView imgView_proPic, imgView_postPic;
-        RelativeLayout commentBtn = (RelativeLayout)itemView.findViewById(R.id.row_commentbtn);
+        RelativeLayout commentBtn = (RelativeLayout) itemView.findViewById(R.id.row_commentBtn);
 
         public MyViewHolder(View itemView) {
             super(itemView);

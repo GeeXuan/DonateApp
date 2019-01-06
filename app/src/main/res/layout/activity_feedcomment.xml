@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activities.PopComment">
+    tools:context=".Activities.FeedCommentActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/commentrecyclerView"
+        android:id="@+id/commentRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

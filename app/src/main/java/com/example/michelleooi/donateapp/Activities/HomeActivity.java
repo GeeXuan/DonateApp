@@ -1,27 +1,40 @@
 package com.example.michelleooi.donateapp.Activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.michelleooi.donateapp.Adapters.AdapterFeedImage;
 import com.example.michelleooi.donateapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UploadPhotoDialog.BottomSheetListener {
 
     private DrawerLayout drawer;
+    AdapterFeedImage adapterFeedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -34,16 +47,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if(savedInstanceState == null){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new FeedFragment()).commit();
-        navigationView.setCheckedItem(R.id.nav_newsfeed);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new FeedFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_newsfeed);
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_newsfeed:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new FeedFragment()).commit();
@@ -54,18 +67,53 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         new EventFragment()).commit();
                 drawer.closeDrawers();
                 break;
-                default:
-                    Toast.makeText(this, "not implemented yet", Toast.LENGTH_SHORT).show();
+            default:
+                Toast.makeText(this, "not implemented yet", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
 
     @Override
-    public void onBackPressed(){
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_logout:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(this, LoginActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onButtonClicked(ArrayList<Bitmap> bitmapList) {
+        if (!bitmapList.isEmpty()) {
+            adapterFeedImage = new AdapterFeedImage(this, bitmapList);
+            RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            RecyclerView feedAddPostImage = findViewById(R.id.feedAddPostImage);
+            feedAddPostImage.setLayoutManager(layoutManager2);
+            feedAddPostImage.setAdapter(adapterFeedImage);
+            adapterFeedImage.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }

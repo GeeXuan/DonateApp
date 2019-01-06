@@ -12,27 +12,27 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.michelleooi.donateapp.Models.ModelComment;
+import com.example.michelleooi.donateapp.Models.ModelFeedComment;
 import com.example.michelleooi.donateapp.R;
 
 import java.util.ArrayList;
 
-public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyViewHolder> {
+public class AdapterFeedComment extends RecyclerView.Adapter<AdapterFeedComment.MyViewHolder> {
 
     Context context;
-    ArrayList<ModelComment> modelCommentArrayList = new ArrayList<>();
+    ArrayList<ModelFeedComment> modelFeedCommentArrayList = new ArrayList<>();
     RequestManager glide;
 
-    public AdapterComment(FragmentActivity context, ArrayList<ModelComment> modelCommentArrayList){
+    public AdapterFeedComment(FragmentActivity context, ArrayList<ModelFeedComment> modelFeedCommentArrayList) {
         this.context = context;
-        this.modelCommentArrayList = modelCommentArrayList;
+        this.modelFeedCommentArrayList = modelFeedCommentArrayList;
         glide = Glide.with(context);
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comments,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_feedcomment, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
 
         return viewHolder;
@@ -40,18 +40,18 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        final ModelComment modelComment = modelCommentArrayList.get(position);
+        final ModelFeedComment modelFeedComment = modelFeedCommentArrayList.get(position);
 
-        holder.commenter.setText(modelComment.getName());
-        holder.comments.setText(modelComment.getComments());
-        holder.commentlike.setText("Likes (" + modelComment.getLikes()+")");
-        holder.commenttime.setText(modelComment.getTime());
-        glide.load(modelComment.getPropic()).into(holder.imgView_proPic);
+        holder.commenter.setText(modelFeedComment.getName());
+        holder.comments.setText(modelFeedComment.getComments());
+        holder.commentlike.setText("Likes (" + modelFeedComment.getLikes() + ")");
+        holder.commenttime.setText(modelFeedComment.getTime());
+        glide.load(modelFeedComment.getPropic()).into(holder.imgView_proPic);
     }
 
     @Override
     public int getItemCount() {
-        return modelCommentArrayList.size();
+        return modelFeedCommentArrayList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{

@@ -1,14 +1,18 @@
 package com.example.michelleooi.donateapp.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.michelleooi.donateapp.Adapters.AdapterFeed;
 import com.example.michelleooi.donateapp.Models.ModelFeed;
@@ -18,9 +22,12 @@ import java.util.ArrayList;
 
 public class FeedFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    RecyclerView feedRecyclerView;
+    ImageButton bUploadImage;
     ArrayList<ModelFeed> modelFeedArrayList = new ArrayList<>();
     AdapterFeed adapterFeed;
+    EditText feedAddPostText;
+    Button btnPostFeed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,28 +37,43 @@ public class FeedFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).setActionBarTitle("News Feed");
 
-        recyclerView = getActivity().findViewById(R.id.feedrecyclerView);
-//        RelativeLayout commentBtn = getActivity().findViewById(R.id.row_commentbtn);
-//        commentBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getActivity(), PopComment.class));
-//            }
-//        });
+        feedRecyclerView = getActivity().findViewById(R.id.feedRecyclerView);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        feedRecyclerView.setLayoutManager(layoutManager);
 
         adapterFeed = new AdapterFeed(getActivity(), modelFeedArrayList);
-        recyclerView.setAdapter(adapterFeed);
+        feedRecyclerView.setAdapter(adapterFeed);
 
-        populateRecyclerView();
+        populateFeedRecyclerView();
+        btnPostFeed = getActivity().findViewById(R.id.btnPostFeed);
+        feedAddPostText = getActivity().findViewById(R.id.feedAddPostText);
+        feedAddPostText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    btnPostFeed.setVisibility(View.VISIBLE);
+                } else {
+                    btnPostFeed.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        bUploadImage = getActivity().findViewById(R.id.imageButton);
+        bUploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UploadPhotoDialog dialog = new UploadPhotoDialog();
+                dialog.show(getActivity().getSupportFragmentManager(), "exampleBottomSheet");
+            }
+        });
     }
 
-
-    public void populateRecyclerView() {
+    public void populateFeedRecyclerView() {
 
         ModelFeed modelFeed = new ModelFeed(1, 9, 2, R.drawable.ic_propic1, R.drawable.img_post1,
                 "Sajin Maharjan", "2 hrs", "The cars we drive say a lot about us.");
@@ -65,5 +87,13 @@ public class FeedFragment extends Fragment {
         modelFeedArrayList.add(modelFeed);
 
         adapterFeed.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item1 = menu.add(Menu.NONE, Menu.NONE, 1, "Category");
+        item1.setIcon(R.drawable.ic_list_white_24dp);
+        item1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
