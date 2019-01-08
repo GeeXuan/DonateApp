@@ -1,79 +1,72 @@
 package com.example.michelleooi.donateapp.Models;
 
-/**
- * Created by karsk on 25/04/2018.
- */
+import java.util.Date;
+import java.util.List;
 
 public class ModelFeed {
 
-    int id, likes, comments, propic, postpic;
-    String name, time, status;
+    private int upvotes, downvotes, commentNo;
+    private String id, status, userid, text;
+    private Date postTime;
+    private List<String> postPic, upvotedUsers, downvotedUsers;
 
-    public ModelFeed(int id, int likes, int comments, int propic, int postpic, String name, String time, String status) {
-        this.id = id;
-        this.likes = likes;
-        this.comments = comments;
-        this.propic = propic;
-        this.postpic = postpic;
-        this.name = name;
-        this.time = time;
+    public ModelFeed() {
+    }
+
+    public ModelFeed(int upvotes, int downvotes, int commentNo, String status, String text, String userid, Date postTime) {
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.commentNo = commentNo;
         this.status = status;
+        this.text = text;
+        this.userid = userid;
+        this.postTime = postTime;
     }
 
-    public int getId() {
-        return id;
+    public ModelFeed(int upvotes, int downvotes, int commentNo, String status, String text, String userid, Date postTime, List<String> postPic) {
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.commentNo = commentNo;
+        this.status = status;
+        this.text = text;
+        this.userid = userid;
+        this.postTime = postTime;
+        this.postPic = postPic;
     }
 
-    public void setId(int id) {
+    public ModelFeed(int upvotes, int downvotes, String id, String status, String userid, String text, Date postTime, List<String> postPic) {
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
         this.id = id;
+        this.status = status;
+        this.userid = userid;
+        this.text = text;
+        this.postTime = postTime;
+        this.postPic = postPic;
     }
 
-    public int getLikes() {
-        return likes;
+    public int getUpvotes() {
+        return upvotes;
     }
 
-    public void setLikes(int likes) {
-        this.likes = likes;
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
     }
 
-    public int getComments() {
-        return comments;
+    public int getDownvotes() {
+        return downvotes;
     }
 
-    public void setComments(int comments) {
-        this.comments = comments;
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
     }
 
-    public int getPropic() {
-        return propic;
+    public int getCommentNo() {
+        return commentNo;
     }
 
-    public void setPropic(int propic) {
-        this.propic = propic;
-    }
-
-    public int getPostpic() {
-        return postpic;
-    }
-
-    public void setPostpic(int postpic) {
-        this.postpic = postpic;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setCommentNo(int commentNo) {
+        this.commentNo = commentNo;
     }
 
     public String getStatus() {
@@ -82,5 +75,61 @@ public class ModelFeed {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public Date getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
+    }
+
+    public List<String> getPostPic() {
+        return postPic;
+    }
+
+    public void setPostPic(List<String> postPic) {
+        this.postPic = postPic;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<String> getUpvotedUsers() {
+        return upvotedUsers;
+    }
+
+    public void setUpvotedUsers(List<String> upvotedUsers) {
+        this.upvotedUsers = upvotedUsers;
+    }
+
+    public List<String> getDownvotedUsers() {
+        return downvotedUsers;
+    }
+
+    public void setDownvotedUsers(List<String> downvotedUsers) {
+        this.downvotedUsers = downvotedUsers;
     }
 }

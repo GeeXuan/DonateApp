@@ -10,18 +10,24 @@
         android:required="false" />
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.RegisterActivity">
-
+        <activity android:name=".Activities.RegisterActivity"></activity>
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".Activities.FeedCommentActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".Activities.PostFeedActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity" />
         </activity>
-        <activity android:name=".Activities.HomeActivity" />
-        <activity android:name=".Activities.FeedCommentActivity" />
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,5 +45,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".Activities.ProfileViewActivity"></activity>
     </application>
+
 </manifest>

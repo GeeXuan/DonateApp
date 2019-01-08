@@ -1,7 +1,7 @@
 package com.example.michelleooi.donateapp.Activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -10,23 +10,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.michelleooi.donateapp.Adapters.AdapterFeedImage;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.example.michelleooi.donateapp.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
-
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UploadPhotoDialog.BottomSheetListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
-    AdapterFeedImage adapterFeedImage;
+    RequestManager glide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +48,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        showUser(navigationView);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new FeedFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_newsfeed);
         }
+    }
+
+    private void showUser(NavigationView navigationView) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        Uri userProPic = user.getPhotoUrl();
+        String userName = user.getDisplayName();
+        String userEmail = user.getEmail();
+
+        View header = navigationView.getHeaderView(0);
+        ImageView mUserProPic = (ImageView) header.findViewById(R.id.userProPic);
+        TextView mUserName = (TextView) header.findViewById(R.id.userName);
+        TextView mUserEmail = (TextView) header.findViewById(R.id.userEmail);
+
+        glide = Glide.with(this);
+        glide.load(userProPic).into(mUserProPic);
+        mUserName.setText(userName);
+        mUserEmail.setText(userEmail);
     }
 
     @Override
@@ -91,18 +112,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onButtonClicked(ArrayList<Bitmap> bitmapList) {
-        if (!bitmapList.isEmpty()) {
-            adapterFeedImage = new AdapterFeedImage(this, bitmapList);
-            RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            RecyclerView feedAddPostImage = findViewById(R.id.feedAddPostImage);
-            feedAddPostImage.setLayoutManager(layoutManager2);
-            feedAddPostImage.setAdapter(adapterFeedImage);
-            adapterFeedImage.notifyDataSetChanged();
         }
     }
 

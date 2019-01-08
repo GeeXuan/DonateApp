@@ -1,6 +1,5 @@
 package com.example.michelleooi.donateapp.Activities;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,15 +18,13 @@ import com.example.michelleooi.donateapp.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
-public class UploadPhotoDialog extends BottomSheetDialogFragment {
-    private static final int PICK_IMAGE_MULTIPLE = 1;
+public class CommentUploadPhotoDialog extends BottomSheetDialogFragment {
+    private static final int PICK_IMAGE = 1;
     private static final int CAMERA_REQUEST = 2;
-    ArrayList<Uri> uriArrayList = new ArrayList<>();
     private BottomSheetListener mListener;
     private String pictureImagePath = "";
 
@@ -44,9 +41,8 @@ public class UploadPhotoDialog extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_MULTIPLE);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +61,6 @@ public class UploadPhotoDialog extends BottomSheetDialogFragment {
                 startActivityForResult(intent, CAMERA_REQUEST);
             }
         });
-
         return view;
     }
 
@@ -79,35 +74,19 @@ public class UploadPhotoDialog extends BottomSheetDialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == PICK_IMAGE_MULTIPLE) {
+        if (requestCode == PICK_IMAGE) {
 
             if (resultCode == RESULT_OK) {
                 if (data.getData() != null) {
                     Uri mImageUri = data.getData();
-                    uriArrayList.add(mImageUri);
-                    mListener.onButtonClicked(uriArrayList);
-
-                } else {
-                    if (data.getClipData() != null) {
-                        ClipData mClipData = data.getClipData();
-                        for (int i = 0; i < mClipData.getItemCount(); i++) {
-
-                            ClipData.Item item = mClipData.getItemAt(i);
-                            Uri uri = item.getUri();
-                            uriArrayList.add(uri);
-                        }
-                        mListener.onButtonClicked(uriArrayList);
-                    }
-
+                    mListener.onButtonClicked(mImageUri);
                 }
             }
 
         } else if (requestCode == CAMERA_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Uri uri = Uri.parse(pictureImagePath);
-                uriArrayList.add(uri);
-                mListener.onButtonClicked(uriArrayList);
-
+                mListener.onButtonClicked(uri);
             }
         }
 
@@ -116,7 +95,6 @@ public class UploadPhotoDialog extends BottomSheetDialogFragment {
     }
 
     public interface BottomSheetListener {
-        void onButtonClicked(ArrayList<Uri> uriArrayList);
+        void onButtonClicked(Uri uri);
     }
-
 }

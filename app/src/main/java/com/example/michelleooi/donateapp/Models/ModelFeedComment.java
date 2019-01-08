@@ -1,63 +1,113 @@
 package com.example.michelleooi.donateapp.Models;
 
-public class ModelFeedComment {
-    int id, likes, propic;
-    String name, time, comments;
+import java.util.Date;
+import java.util.List;
 
-    public ModelFeedComment(int id, int likes, int propic, String name, String time, String comments) {
-        this.id = id;
-        this.likes = likes;
-        this.propic = propic;
-        this.name = name;
-        this.time = time;
-        this.comments = comments;
+public class ModelFeedComment {
+    private int upvotes, downvotes;
+    private String id, text, userid, status, postPic;
+    private Date postTime;
+    private List<String> upvotedUsers, downvotedUsers;
+
+    public ModelFeedComment() {
     }
 
-    public int getId() {
+    public ModelFeedComment(int upvotes, int downvotes, String text, String userid, String status, Date postTime) {
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.text = text;
+        this.userid = userid;
+        this.status = status;
+        this.postTime = postTime;
+    }
+
+    public ModelFeedComment(int upvotes, int downvotes, String text, String userid, String status, String postPic, Date postTime) {
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.text = text;
+        this.userid = userid;
+        this.status = status;
+        this.postPic = postPic;
+        this.postTime = postTime;
+    }
+
+    public int getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public int getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPostPic() {
+        return postPic;
+    }
+
+    public void setPostPic(String postPic) {
+        this.postPic = postPic;
+    }
+
+    public Date getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getLikes() {
-        return likes;
+    public List<String> getUpvotedUsers() {
+        return upvotedUsers;
     }
 
-    public void setLikes(int likes) {
-        this.likes = likes;
+    public void setUpvotedUsers(List<String> upvotedUsers) {
+        this.upvotedUsers = upvotedUsers;
     }
 
-    public int getPropic() {
-        return propic;
+    public List<String> getDownvotedUsers() {
+        return downvotedUsers;
     }
 
-    public void setPropic(int propic) {
-        this.propic = propic;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setDownvotedUsers(List<String> downvotedUsers) {
+        this.downvotedUsers = downvotedUsers;
     }
 }
