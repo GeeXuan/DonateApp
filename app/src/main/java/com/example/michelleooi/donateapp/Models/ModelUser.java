@@ -1,16 +1,32 @@
 package com.example.michelleooi.donateapp.Models;
 
 public class ModelUser {
-    private String email, name, role, proPic;
+    private String id, email, name, role, proPic;
 
     public ModelUser() {
     }
 
-    public ModelUser(String email, String name, String role, String proPic) {
+    public ModelUser(String id, String email, String name, String role) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.role = role;
+    }
+
+    public ModelUser(String id, String email, String name, String role, String proPic) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.role = role;
         this.proPic = proPic;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
