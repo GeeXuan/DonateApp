@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.michelleooi.donateapp.R;
@@ -38,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userEmail, userPassword, userPassword2, userName;
     private ProgressBar loadingProgress;
     private Button regBtn;
+    private TextView tvVerify;
 
     private FirebaseAuth mAuth;
 
@@ -52,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         userName = findViewById(R.id.regName);
         loadingProgress = findViewById(R.id.regProgressBar);
         regBtn = findViewById((R.id.regBtn));
+        tvVerify = findViewById(R.id.tvVerify);
 
         loadingProgress.setVisibility(View.INVISIBLE);
 
@@ -67,6 +70,30 @@ public class RegisterActivity extends AppCompatActivity {
                 final String password = userPassword.getText().toString();
                 final String password2 = userPassword2.getText().toString();
                 final String name = userName.getText().toString();
+                final FirebaseUser user = mAuth.getCurrentUser();
+
+                if (user.isEmailVerified()){
+                    tvVerify.setText("Email is verified ! ");
+                }
+
+                else {
+                    tvVerify.setText("Click here to verify your email !");
+                    tvVerify.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(RegisterActivity.this, "Verification email sent !", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "Failed to send verification email !", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
 
                 if (email.isEmpty() || password.isEmpty() || !password.equals(password2) || name.isEmpty()){
                     showMessage("Please verify ALL the fields !");
