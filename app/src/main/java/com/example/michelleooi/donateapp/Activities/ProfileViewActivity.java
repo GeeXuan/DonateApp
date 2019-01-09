@@ -20,10 +20,12 @@ import com.bumptech.glide.RequestManager;
 import com.example.michelleooi.donateapp.Models.ModelUser;
 import com.example.michelleooi.donateapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class ProfileViewActivity extends AppCompatActivity {
 
@@ -69,20 +71,23 @@ public class ProfileViewActivity extends AppCompatActivity {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("Users").whereEqualTo("id", Uid).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                modelUser = task.getResult().toObject(ModelUser.class);
-                Uri userProPic = Uri.parse(modelUser.getProPic());
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
+                if (modelUser.getProPic() != null) {
+                    Uri userProPic = Uri.parse(modelUser.getProPic());
+                    ImageView mUserProPic = (ImageView) findViewById(R.id.userProPic);
+
+                    glide = Glide.with(ProfileViewActivity.this);
+                    glide.load(userProPic).into(mUserProPic);
+                }
                 String userName = modelUser.getName();
                 String userEmail = modelUser.getEmail();
 
-                ImageView mUserProPic = (ImageView) findViewById(R.id.userProPic);
                 TextView mUserName = (TextView) findViewById(R.id.userName);
                 TextView mUserEmail = (TextView) findViewById(R.id.userEmail);
-
-                glide = Glide.with(ProfileViewActivity.this);
-                glide.load(userProPic).into(mUserProPic);
                 mUserName.setText(userName);
                 mUserEmail.setText(userEmail);
             }
@@ -124,9 +129,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPDATEPROFILE) {
-            if (requestCode == RESULT_OK) {
-                showUser();
-            }
+            showUser();
         }
     }
 }

@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -50,10 +51,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("Users").whereEqualTo("id", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                ModelUser modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
                 if (modelUser.getRole().equals("Staff")) {
                     Menu menu = navigationView.getMenu();
                     SubMenu subMenu = menu.addSubMenu("Staff Actions");
@@ -77,7 +79,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showUser(NavigationView navigationView) {
-        Uri userProPic = user.getPhotoUrl();
+        Uri userProPic = null;
+        if (user.getPhotoUrl() != null) {
+            userProPic = user.getPhotoUrl();
+        }
         String userName = user.getDisplayName();
         String userEmail = user.getEmail();
 
@@ -86,8 +91,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         TextView mUserName = (TextView) header.findViewById(R.id.userName);
         TextView mUserEmail = (TextView) header.findViewById(R.id.userEmail);
 
-        glide = Glide.with(this);
-        glide.load(userProPic).into(mUserProPic);
+        if (userProPic != null) {
+            glide = Glide.with(this);
+            glide.load(userProPic).into(mUserProPic);
+        }
         mUserName.setText(userName);
         mUserEmail.setText(userEmail);
 

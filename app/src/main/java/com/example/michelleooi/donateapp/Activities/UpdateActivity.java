@@ -1,6 +1,7 @@
 package com.example.michelleooi.donateapp.Activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -43,11 +45,12 @@ public class UpdateActivity extends AppCompatActivity {
 
     static int PReqCode = 1;
     static int REQUESTCODE = 2;
+    private final static int UPDATEPROFILE = 5;
     Uri pickedImgUri;
 
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
-    FirebaseFirestore db= FirebaseFirestore.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,11 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void updateProfile(final String name, Uri pickedImgUri, final FirebaseUser currentUser) {
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Updating");
+        progress.setMessage("Updating your profile...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
 
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("users_photos");
         final StorageReference imageFilePath = mStorage.child(pickedImgUri.getLastPathSegment());
@@ -109,15 +117,16 @@ public class UpdateActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            db.collection("Users").document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            db.collection("Users").whereEqualTo("id", currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                 @Override
-                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    ModelUser modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
                                                     modelUser.setName(name);
                                                     modelUser.setProPic(uri.toString());
                                                     db.collection("Users").document(currentUser.getUid()).set(modelUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
+                                                            progress.dismiss();
                                                             showMessage("Update Successful !");
                                                             updateUI();
                                                         }

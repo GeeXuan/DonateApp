@@ -44,7 +44,6 @@ public class DonateHistoryTab extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         super.onActivityCreated(savedInstanceState);
         userid = getArguments().getString("userid");
         donateHistoryRecyclerView = getActivity().findViewById(R.id.feedHistoryRecyclerView);
@@ -62,10 +61,10 @@ public class DonateHistoryTab extends Fragment {
         modelPaymentArrayList.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        db.collection("Feeds")
+        db.collection("Payments")
                 .whereEqualTo("userid", userid)
-                .whereEqualTo("status", "Active")
-                .orderBy("postTime", Query.Direction.DESCENDING)
+                .whereEqualTo("status", "Paid")
+                .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
