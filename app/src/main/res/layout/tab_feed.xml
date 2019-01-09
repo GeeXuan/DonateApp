@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/light_grey"
+    tools:context=".Activities.FeedTab">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"

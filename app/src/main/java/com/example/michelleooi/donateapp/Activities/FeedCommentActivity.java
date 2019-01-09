@@ -157,6 +157,9 @@ public class FeedCommentActivity extends AppCompatActivity implements CommentUpl
                         progress.dismiss();
                         populateRecyclerView();
                     }
+                    commentInsertText.setText("");
+                    commentInsertPhotoPreview.setVisibility(View.GONE);
+                    commentInsertText.clearFocus();
                 }
             }
         });

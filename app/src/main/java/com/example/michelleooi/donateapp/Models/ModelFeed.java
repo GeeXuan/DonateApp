@@ -6,14 +6,14 @@ import java.util.List;
 public class ModelFeed {
 
     private int upvotes, downvotes, commentNo;
-    private String id, status, userid, text;
+    private String id, status, userid, text, area;
     private Date postTime;
     private List<String> postPic, upvotedUsers, downvotedUsers;
 
     public ModelFeed() {
     }
 
-    public ModelFeed(int upvotes, int downvotes, int commentNo, String status, String text, String userid, Date postTime) {
+    public ModelFeed(int upvotes, int downvotes, int commentNo, String status, String text, String userid, Date postTime, String area) {
         this.upvotes = upvotes;
         this.downvotes = downvotes;
         this.commentNo = commentNo;
@@ -21,9 +21,10 @@ public class ModelFeed {
         this.text = text;
         this.userid = userid;
         this.postTime = postTime;
+        this.area = area;
     }
 
-    public ModelFeed(int upvotes, int downvotes, int commentNo, String status, String text, String userid, Date postTime, List<String> postPic) {
+    public ModelFeed(int upvotes, int downvotes, int commentNo, String status, String text, String userid, Date postTime, List<String> postPic, String area) {
         this.upvotes = upvotes;
         this.downvotes = downvotes;
         this.commentNo = commentNo;
@@ -32,17 +33,7 @@ public class ModelFeed {
         this.userid = userid;
         this.postTime = postTime;
         this.postPic = postPic;
-    }
-
-    public ModelFeed(int upvotes, int downvotes, String id, String status, String userid, String text, Date postTime, List<String> postPic) {
-        this.upvotes = upvotes;
-        this.downvotes = downvotes;
-        this.id = id;
-        this.status = status;
-        this.userid = userid;
-        this.text = text;
-        this.postTime = postTime;
-        this.postPic = postPic;
+        this.area = area;
     }
 
     public int getUpvotes() {
@@ -131,5 +122,13 @@ public class ModelFeed {
 
     public void setDownvotedUsers(List<String> downvotedUsers) {
         this.downvotedUsers = downvotedUsers;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

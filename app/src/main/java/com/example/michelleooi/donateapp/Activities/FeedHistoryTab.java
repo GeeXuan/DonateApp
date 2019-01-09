@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class FeedHistoryTab extends Fragment {
 
-    RecyclerView feedRecyclerView;
+    RecyclerView feedHistoryRecyclerView;
     ArrayList<ModelFeed> modelFeedArrayList = new ArrayList<>();
     AdapterFeed adapterFeed;
     Button btnPostFeed;
@@ -51,10 +51,10 @@ public class FeedHistoryTab extends Fragment {
         super.onActivityCreated(savedInstanceState);
         progress = getActivity().findViewById(R.id.progress_bar);
         userid = getArguments().getString("userid");
-        feedRecyclerView = getActivity().findViewById(R.id.feedRecyclerView);
+        feedHistoryRecyclerView = getActivity().findViewById(R.id.feedHistoryRecyclerView);
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        feedRecyclerView.setLayoutManager(layoutManager);
+        feedHistoryRecyclerView.setLayoutManager(layoutManager);
         emptyText = getActivity().findViewById(R.id.emptyText);
 
         populateFeedRecyclerView(Query.Direction.DESCENDING);
@@ -63,7 +63,7 @@ public class FeedHistoryTab extends Fragment {
 
     public void populateFeedRecyclerView(Query.Direction direction) {
         adapterFeed = new AdapterFeed(getActivity(), modelFeedArrayList);
-        feedRecyclerView.setAdapter(adapterFeed);
+        feedHistoryRecyclerView.setAdapter(adapterFeed);
         modelFeedArrayList.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -97,7 +97,7 @@ public class FeedHistoryTab extends Fragment {
                             emptyText.setVisibility(View.GONE);
                         }
                         adapterFeed.notifyDataSetChanged();
-                        feedRecyclerView.setVisibility(View.VISIBLE);
+                        feedHistoryRecyclerView.setVisibility(View.VISIBLE);
                         progress.setVisibility(View.GONE);
                     }
                 });

@@ -10,11 +10,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.michelleooi.donateapp.Adapters.AdapterFeedImage;
@@ -32,6 +35,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDialog.BottomSheetListener {
@@ -41,9 +45,11 @@ public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDi
     LinearLayout sliderDotspanel;
     Button btnPostFeed;
     EditText feedAddPostText;
+    Spinner spinner;
     ArrayList<Uri> uriArrayList = new ArrayList<>();
     private int dotscount;
     private ImageView[] dots;
+    String area;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +59,22 @@ public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDi
         viewPager = findViewById(R.id.viewPager);
         sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
         feedAddPostText = (EditText) findViewById(R.id.feedAddPostText);
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.areas, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                area = adapterView.getItemAtPosition(i).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                area = spinner.getSelectedItem().toString();
+            }
+        });
 
         btnPostFeed = findViewById(R.id.btnPostFeed);
         btnPostFeed.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +92,8 @@ public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDi
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     final CollectionReference modelFeedRef = db.collection("Feeds");
                     String text = feedAddPostText.getText().toString();
-                    final ModelFeed modelFeed = new ModelFeed(0, 0, 0, "Active", text, mAuth.getUid(), new Date(), null);
+                    final HashMap data = new HashMap<>();
+                    final ModelFeed modelFeed = new ModelFeed(0, 0, 0, "Active", text, mAuth.getUid(), new Date(), area);
                     final ArrayList<String> downloadUrl = new ArrayList<>();
                     if (uriArrayList != null && !uriArrayList.isEmpty()) {
                         final int size = uriArrayList.size();

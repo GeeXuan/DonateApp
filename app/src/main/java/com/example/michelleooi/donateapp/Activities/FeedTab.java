@@ -1,16 +1,15 @@
 package com.example.michelleooi.donateapp.Activities;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,44 +31,60 @@ import java.util.ArrayList;
 
 public class FeedTab extends Fragment {
 
-    private final static int POST_ACTIVITY = 5;
     RecyclerView feedRecyclerView;
     ArrayList<ModelFeed> modelFeedArrayList = new ArrayList<>();
     AdapterFeed adapterFeed;
-    Button btnPostFeed;
     SwipeRefreshLayout swipeLayout;
     ProgressBar progress;
     TextView emptyText;
+    String area, direction;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.tab_feed_history, container, false);
+        return inflater.inflate(R.layout.tab_feed, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-
+        super.onActivityCreated(savedInstanceState);
+        swipeLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateFeedRecyclerView();
+            }
+        });
+        swipeLayout.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light));
         feedRecyclerView = getActivity().findViewById(R.id.feedRecyclerView);
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        feedRecyclerView.setLayoutManager(layoutManager);
-        emptyText = getActivity().findViewById(R.id.emptyText);
-
-        populateFeedRecyclerView(Query.Direction.DESCENDING);
-        btnPostFeed = getActivity().findViewById(R.id.btnPostFeed);
-    }
-
-    public void populateFeedRecyclerView(Query.Direction direction) {
         adapterFeed = new AdapterFeed(getActivity(), modelFeedArrayList);
         feedRecyclerView.setAdapter(adapterFeed);
+        feedRecyclerView.setLayoutManager(layoutManager);
+        emptyText = getActivity().findViewById(R.id.emptyText);
+        progress = getActivity().findViewById(R.id.progress_bar);
+        area = getArguments().getString("area");
+        direction = getArguments().getString("direction");
+        populateFeedRecyclerView();
+    }
+
+    public void populateFeedRecyclerView() {
+        Query.Direction queryDirection;
+        if (direction.equals("ascending"))
+            queryDirection = Query.Direction.ASCENDING;
+        else
+            queryDirection = Query.Direction.DESCENDING;
         modelFeedArrayList.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference modelFeedRef = db.collection("Feeds");
         modelFeedRef
                 .whereEqualTo("status", "Active")
-                .orderBy("postTime", direction)
+                .whereEqualTo("area", area)
+                .orderBy("postTime", queryDirection)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
