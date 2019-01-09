@@ -1,7 +1,9 @@
 package com.example.michelleooi.donateapp.Activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private String Uid;
     private ModelUser modelUser;
+    private final static int UPDATEPROFILE = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,15 @@ public class ProfileViewActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         Uid = getIntent().getStringExtra("Uid");
         showUser();
+
+        TextView editProfile = findViewById(R.id.editProfile);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileViewActivity.this, UpdateActivity.class);
+                startActivityForResult(intent, UPDATEPROFILE);
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -104,6 +117,16 @@ public class ProfileViewActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return 2;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UPDATEPROFILE) {
+            if (requestCode == RESULT_OK) {
+                showUser();
+            }
         }
     }
 }

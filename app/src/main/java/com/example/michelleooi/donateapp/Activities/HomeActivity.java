@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,12 +21,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.michelleooi.donateapp.Models.ModelUser;
 import com.example.michelleooi.donateapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = mAuth.getCurrentUser();
     private DrawerLayout drawer;
     RequestManager glide;
 
@@ -38,10 +46,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         StrictMode.setVmPolicy(builder.build());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+                if (modelUser.getRole().equals("Staff")) {
+                    Menu menu = navigationView.getMenu();
+                    SubMenu subMenu = menu.addSubMenu("Staff Actions");
+                    subMenu.add(0, 99, 0, "Approve Event");
+                }
+            }
+        });
 
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -58,8 +77,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showUser(NavigationView navigationView) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
         Uri userProPic = user.getPhotoUrl();
         String userName = user.getDisplayName();
         String userEmail = user.getEmail();
@@ -97,8 +114,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         new EventFragment()).commit();
                 drawer.closeDrawers();
                 break;
+            case 99:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ManageEventFragment()).commit();
+                drawer.closeDrawers();
             default:
-                Toast.makeText(this, "not implemented yet", Toast.LENGTH_SHORT).show();
         }
         return true;
     }

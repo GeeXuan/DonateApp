@@ -14,6 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".Activities.ApproveEventActivity" />
+        <activity android:name=".Activities.UpdateActivity" />
         <activity android:name=".Activities.EventDetailsActivity" />
         <activity android:name=".Activities.ProfileViewActivity" />
         <activity android:name=".Activities.AddEventActivity" />
@@ -45,6 +47,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.michelleooi.donateapp.Activities.ApproveEventActivity;
 import com.example.michelleooi.donateapp.Activities.EventDetailsActivity;
 import com.example.michelleooi.donateapp.Models.ModelEvent;
 import com.example.michelleooi.donateapp.R;
@@ -28,9 +29,10 @@ public class AdapterEvent extends RecyclerView.Adapter<AdapterEvent.MyViewHolder
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String userid = mAuth.getUid();
+    private String operation;
 
-    public AdapterEvent(FragmentActivity context, ArrayList<ModelEvent> modelFeedArrayList) {
-
+    public AdapterEvent(FragmentActivity context, ArrayList<ModelEvent> modelFeedArrayList, String operation) {
+        this.operation = operation;
         this.context = context;
         this.modelEventArrayList = modelFeedArrayList;
         glide = Glide.with(context);
@@ -58,9 +60,15 @@ public class AdapterEvent extends RecyclerView.Adapter<AdapterEvent.MyViewHolder
         holder.eventCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, EventDetailsActivity.class);
-                intent.putExtra("EventID", modelEvent.getId());
-                context.startActivity(intent);
+                if (operation.equals("Donate")) {
+                    Intent intent = new Intent(context, EventDetailsActivity.class);
+                    intent.putExtra("EventID", modelEvent.getId());
+                    context.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(context, ApproveEventActivity.class);
+                    intent.putExtra("EventID", modelEvent.getId());
+                    context.startActivity(intent);
+                }
             }
         });
     }

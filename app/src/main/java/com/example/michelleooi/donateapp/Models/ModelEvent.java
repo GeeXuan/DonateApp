@@ -4,21 +4,23 @@ import java.util.Date;
 import java.util.List;
 
 public class ModelEvent {
-    String id, title, name, description, status;
-    double goal;
+    String id, title, name, description, status, submitter;
+    double goal, donationamount;
     Date submitDate;
     List<String> images;
 
     public ModelEvent() {
     }
 
-    public ModelEvent(String title, String name, String description, String status, double goal, Date submitDate) {
+    public ModelEvent(String title, String name, String description, String status, double goal, Date submitDate, String submitter, double donationamount) {
         this.title = title;
         this.name = name;
         this.description = description;
         this.status = status;
         this.goal = goal;
         this.submitDate = submitDate;
+        this.submitter = submitter;
+        this.donationamount = donationamount;
     }
 
     public String getId() {
@@ -83,5 +85,21 @@ public class ModelEvent {
 
     public void setSubmitDate(Date submitDate) {
         this.submitDate = submitDate;
+    }
+
+    public String getSubmitter() {
+        return submitter;
+    }
+
+    public void setSubmitter(String submitter) {
+        this.submitter = submitter;
+    }
+
+    public double getDonationamount() {
+        return donationamount;
+    }
+
+    public void setDonationamount(double donationamount) {
+        this.donationamount = donationamount;
     }
 }

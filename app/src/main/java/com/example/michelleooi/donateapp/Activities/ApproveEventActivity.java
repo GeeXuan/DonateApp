@@ -1,6 +1,5 @@
 package com.example.michelleooi.donateapp.Activities;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,19 +10,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.michelleooi.donateapp.Adapters.AdapterFeedImage;
 import com.example.michelleooi.donateapp.Models.ModelEvent;
 import com.example.michelleooi.donateapp.Models.ModelPayment;
-import com.example.michelleooi.donateapp.Models.ModelUser;
 import com.example.michelleooi.donateapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,14 +31,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventDetailsActivity extends AppCompatActivity {
+public class ApproveEventActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     LinearLayout sliderDotspanel;
     ViewPager viewPager;
     TextView eventName;
     TextView eventTitle;
     TextView eventDescription;
-    Button btnDonate;
+    Button btnApprove;
     String eventid;
     Uri uri;
     ImageView[] dots;
@@ -50,48 +48,37 @@ public class EventDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
+        setContentView(R.layout.activity_approve_event);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
         eventName = findViewById(R.id.eventName);
         eventTitle = findViewById(R.id.eventTitle);
-        btnDonate = findViewById(R.id.btnDonate);
+        btnApprove = findViewById(R.id.btnApprove);
         eventDescription = findViewById(R.id.eventDescription);
         eventid = getIntent().getStringExtra("EventID");
-        btnDonate.setOnClickListener(new View.OnClickListener() {
+        btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EventDetailsActivity.this);
-                builder.setTitle("Please type your amount");
-                final EditText input = new EditText(EventDetailsActivity.this);
-                input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                input.setText("5.00");
-                builder.setView(input);
-                builder.setPositiveButton("Donate", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ApproveEventActivity.this);
+                builder.setTitle("Are you sure?");
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialogInterface, int i) {
-                        if (!input.getText().toString().isEmpty()) {
-                            ModelPayment modelPayment = new ModelPayment(FirebaseAuth.getInstance().getUid(), eventid, "Paid", new Date(), Double.parseDouble(input.getText().toString()));
-                            db.collection("Payments").add(modelPayment);
-                            db.collection("Events").document(eventid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    ModelEvent modelEvent = documentSnapshot.toObject(ModelEvent.class);
-                                    modelEvent.setDonationamount(modelEvent.getDonationamount() + Double.parseDouble(input.getText().toString()));
-                                    db.collection("Events").document(eventid).set(modelEvent).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            showToast("Approve Successful");
-                                            dialogInterface.dismiss();
-                                            finish();
-                                        }
-                                    });
-                                }
-                            });
-                            showToast("Donate Successful");
-                            dialogInterface.dismiss();
-                        } else
-                            showToast("Please enter an amount!");
+                        db.collection("Events").document(eventid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                ModelEvent modelEvent = documentSnapshot.toObject(ModelEvent.class);
+                                modelEvent.setStatus("Active");
+                                db.collection("Events").document(eventid).set(modelEvent).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        showToast("Approve Successful");
+                                        dialogInterface.dismiss();
+                                        finish();
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -118,12 +105,12 @@ public class EventDetailsActivity extends AppCompatActivity {
                         uri = Uri.parse(postpic);
                         uriImage.add(uri);
                     }
-                    AdapterFeedImage adapterFeedImage = new AdapterFeedImage(EventDetailsActivity.this, uriImage);
+                    AdapterFeedImage adapterFeedImage = new AdapterFeedImage(ApproveEventActivity.this, uriImage);
                     viewPager.setAdapter(adapterFeedImage);
                     dotscount = adapterFeedImage.getCount();
                     dots = new ImageView[dotscount];
                     for (int i = 0; i < dotscount; i++) {
-                        dots[i] = new ImageView(EventDetailsActivity.this);
+                        dots[i] = new ImageView(ApproveEventActivity.this);
                         dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nonactive_dot));
 
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -161,4 +148,5 @@ public class EventDetailsActivity extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
 }

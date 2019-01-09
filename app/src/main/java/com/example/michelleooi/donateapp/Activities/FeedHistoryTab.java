@@ -58,7 +58,6 @@ public class FeedHistoryTab extends Fragment {
         emptyText = getActivity().findViewById(R.id.emptyText);
 
         populateFeedRecyclerView(Query.Direction.DESCENDING);
-        btnPostFeed = getActivity().findViewById(R.id.btnPostFeed);
     }
 
     public void populateFeedRecyclerView(Query.Direction direction) {

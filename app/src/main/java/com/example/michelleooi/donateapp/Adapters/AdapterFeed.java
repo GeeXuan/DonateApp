@@ -1,12 +1,15 @@
 package com.example.michelleooi.donateapp.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,8 +112,6 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
                             holder.feedText.setVisibility(View.GONE);
                         }
 
-                        Uri uri = Uri.parse(modelUser.getProPic());
-                        glide.load(uri).into(holder.imgView_proPic);
                         holder.commentBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -119,6 +120,9 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
                                 context.startActivity(intent);
                             }
                         });
+                        Uri uri = Uri.parse(modelUser.getProPic());
+                        if (modelUser.getProPic() != null && !modelUser.getProPic().isEmpty())
+                            glide.load(uri).into(holder.imgView_proPic);
                         holder.imgView_proPic.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -252,7 +256,6 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageButton feedMoreButton;
         TextView feedUserName, feedPostDate, feedUpvoteAmount, feedDownvoteAmount, feedCommentAmount, feedText;
         ImageView imgView_proPic, feedUpvoteImage, feedDownvoteImage;
         ViewPager viewPager;
@@ -268,7 +271,6 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
             imgView_proPic = (ImageView) itemView.findViewById(R.id.feedProPic);
             feedUpvoteImage = (ImageView) itemView.findViewById(R.id.feedUpvoteImage);
             feedDownvoteImage = (ImageView) itemView.findViewById(R.id.feedDownvoteImage);
-            feedMoreButton = itemView.findViewById(R.id.feedMoreButton);
             viewPager = (ViewPager) itemView.findViewById(R.id.viewPager);
             sliderDotspanel = (LinearLayout) itemView.findViewById(R.id.SliderDots);
             feedUserName = (TextView) itemView.findViewById(R.id.feedUserName);

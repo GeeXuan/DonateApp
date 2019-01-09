@@ -108,7 +108,7 @@ public class AddEventActivity extends AppCompatActivity {
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 final CollectionReference modelEventRef = db.collection("Events");
-                final ModelEvent modelEvent = new ModelEvent(eventTitleString, eventNameString, eventDescriptionString, "Pending", eventGoalDouble, new Date());
+                final ModelEvent modelEvent = new ModelEvent(eventTitleString, eventNameString, eventDescriptionString, "Pending", eventGoalDouble, new Date(), mAuth.getUid(), 0);
                 final ArrayList<String> downloadUrl = new ArrayList<>();
                 if (uriArrayList != null && !uriArrayList.isEmpty()) {
                     final int size = uriArrayList.size();

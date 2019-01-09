@@ -28,9 +28,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class EventFragment extends Fragment {
+public class ManageEventFragment extends Fragment {
 
-    private FloatingActionButton fab;
     private RecyclerView eventRecyclerView;
     private AdapterEvent adapterEvent;
     private ArrayList<ModelEvent> modelEventArrayList = new ArrayList<>();
@@ -45,17 +44,9 @@ public class EventFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ((HomeActivity) getActivity()).setActionBarTitle("Event");
-        fab = getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddEventActivity.class);
-                startActivity(intent);
-            }
-        });
+        ((HomeActivity) getActivity()).setActionBarTitle("Manage Event");
         eventRecyclerView = getActivity().findViewById(R.id.eventRecyclerView);
-        adapterEvent = new AdapterEvent(getActivity(), modelEventArrayList, "Donate");
+        adapterEvent = new AdapterEvent(getActivity(), modelEventArrayList, "Approve");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         eventRecyclerView.setAdapter(adapterEvent);
         eventRecyclerView.setLayoutManager(layoutManager);
@@ -67,7 +58,7 @@ public class EventFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference modelEventRef = db.collection("Events");
         modelEventRef
-                .whereEqualTo("status", "Active")
+                .whereEqualTo("status", "Pending")
                 .orderBy("submitDate", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
