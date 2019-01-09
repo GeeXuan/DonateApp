@@ -18,6 +18,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/userphoto"
+        android:contentDescription="@string/regphoto"
         app:layout_constraintBottom_toTopOf="@+id/regName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +33,7 @@
 
     <EditText
         android:background="@drawable/reg_edittext_style"
-        android:hint="Name"
+        android:hint="@string/regname"
         android:id="@+id/regName"
         android:layout_width="265dp"
         android:layout_height="wrap_content"
@@ -58,7 +59,7 @@
         android:layout_marginBottom="2dp"
         android:background="@drawable/reg_edittext_style"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/mail"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +67,7 @@
 
     <EditText
         android:background="@drawable/reg_edittext_style"
-        android:hint="Password"
+        android:hint="@string/password"
         android:id="@+id/regPassword"
         android:layout_width="265dp"
         android:layout_height="wrap_content"
@@ -83,7 +84,7 @@
 
     <EditText
         android:background="@drawable/reg_edittext_style"
-        android:hint="Confirm Password"
+        android:hint="@string/confirmpass"
         android:id="@+id/regPassword2"
         android:layout_width="265dp"
         android:layout_height="wrap_content"
@@ -109,7 +110,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/reg_btn_style"
-        android:text="Register"
+        android:text="@string/register"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
