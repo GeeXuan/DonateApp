@@ -126,6 +126,7 @@ public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDi
 
     @Override
     public void onButtonClicked(ArrayList<Uri> uriArrayList) {
+        sliderDotspanel.removeAllViews();
         if (!uriArrayList.isEmpty()) {
             this.uriArrayList = uriArrayList;
             AdapterFeedImage adapterFeedImage = new AdapterFeedImage(this, uriArrayList);

@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void showUser(NavigationView navigationView) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        final FirebaseUser user = mAuth.getCurrentUser();
         Uri userProPic = user.getPhotoUrl();
         String userName = user.getDisplayName();
         String userEmail = user.getEmail();
@@ -73,6 +73,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         glide.load(userProPic).into(mUserProPic);
         mUserName.setText(userName);
         mUserEmail.setText(userEmail);
+
+        mUserProPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, ProfileViewActivity.class);
+                intent.putExtra("userid", user.getUid());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

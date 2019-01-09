@@ -14,4 +14,11 @@
     <string name="confirmpass">Confirm Password</string>
     <string name="register">Register</string>
     <string name="regphoto">Register User Photo</string>
+    <string name="ic_no">IC No (without dashes)</string>
+    <string name="title_activity_test">Test</string>
+    <string name="tab_text_1">Feeds History</string>
+    <string name="tab_text_2">Donate History</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_test2">test2</string>
 </resources>

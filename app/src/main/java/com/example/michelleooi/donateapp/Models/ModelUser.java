@@ -1,24 +1,26 @@
 package com.example.michelleooi.donateapp.Models;
 
 public class ModelUser {
-    private String id, email, name, role, proPic;
+    private String id, email, name, role, proPic, ic;
 
     public ModelUser() {
     }
 
-    public ModelUser(String id, String email, String name, String role) {
+    public ModelUser(String id, String email, String name, String role, String ic) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.role = role;
+        this.ic = ic;
     }
 
-    public ModelUser(String id, String email, String name, String role, String proPic) {
+    public ModelUser(String id, String email, String name, String role, String proPic, String ic) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.role = role;
         this.proPic = proPic;
+        this.ic = ic;
     }
 
     public String getId() {
@@ -59,5 +61,13 @@ public class ModelUser {
 
     public void setProPic(String proPic) {
         this.proPic = proPic;
+    }
+
+    public String getIc() {
+        return ic;
+    }
+
+    public void setIc(String ic) {
+        this.ic = ic;
     }
 }

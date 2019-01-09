@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.michelleooi.donateapp.Activities.FeedCommentActivity;
+import com.example.michelleooi.donateapp.Activities.ProfileViewActivity;
 import com.example.michelleooi.donateapp.Models.ModelFeed;
 import com.example.michelleooi.donateapp.Models.ModelUser;
 import com.example.michelleooi.donateapp.R;
@@ -82,7 +83,8 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+                        final ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+                        modelUser.setId(documentSnapshot.getId());
                         holder.sliderDotspanel.removeAllViews();
 
                         holder.feedUserName.setText(modelUser.getName());
@@ -113,6 +115,14 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
                             public void onClick(View view) {
                                 Intent intent = new Intent(context, FeedCommentActivity.class);
                                 intent.putExtra("FeedID", modelFeed.getId());
+                                context.startActivity(intent);
+                            }
+                        });
+                        holder.imgView_proPic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(context, ProfileViewActivity.class);
+                                intent.putExtra("Uid", modelUser.getId());
                                 context.startActivity(intent);
                             }
                         });

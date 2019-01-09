@@ -1,8 +1,10 @@
 package com.example.michelleooi.donateapp.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,14 +12,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ThemedSpinnerAdapter;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +54,6 @@ public class FeedFragment extends Fragment {
     SwipeRefreshLayout swipeLayout;
     ProgressBar progress;
     TextView emptyText;
-    int firstVisibleItem, visibleItemCount, totalItemCount;
-    private int previousTotal = 0;
-    private boolean loading = true;
-    private int visibleThreshold = 5;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +79,30 @@ public class FeedFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_red_light));
         ((HomeActivity) getActivity()).setActionBarTitle("News Feed");
 
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
+        spinner.setAdapter(new MyAdapter(
+                toolbar.getContext(),
+                new String[]{
+                        "Section 1",
+                        "Section 2",
+                        "Section 3",
+                }));
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+//                        .commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         feedRecyclerView = getActivity().findViewById(R.id.feedRecyclerView);
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -92,7 +119,9 @@ public class FeedFragment extends Fragment {
         modelFeedArrayList.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference modelFeedRef = db.collection("Feeds");
-        modelFeedRef.orderBy("postTime", direction)
+        modelFeedRef
+                .whereEqualTo("status", "Active")
+                .orderBy("postTime", direction)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -176,5 +205,43 @@ public class FeedFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
+        private final ThemedSpinnerAdapter.Helper mDropDownHelper;
+
+        public MyAdapter(Context context, String[] objects) {
+            super(context, android.R.layout.simple_list_item_1, objects);
+            mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            View view;
+
+            if (convertView == null) {
+                // Inflate the drop down using the helper's LayoutInflater
+                LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
+                view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            } else {
+                view = convertView;
+            }
+
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(getItem(position));
+
+            return view;
+        }
+
+        @Override
+        public Resources.Theme getDropDownViewTheme() {
+            return mDropDownHelper.getDropDownViewTheme();
+        }
+
+        @Override
+        public void setDropDownViewTheme(Resources.Theme theme) {
+            mDropDownHelper.setDropDownViewTheme(theme);
+        }
     }
 }

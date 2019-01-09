@@ -1,6 +1,7 @@
 package com.example.michelleooi.donateapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.michelleooi.donateapp.Activities.ProfileViewActivity;
 import com.example.michelleooi.donateapp.Models.ModelFeedComment;
 import com.example.michelleooi.donateapp.Models.ModelUser;
 import com.example.michelleooi.donateapp.R;
@@ -75,7 +77,8 @@ public class AdapterFeedComment extends RecyclerView.Adapter<AdapterFeedComment.
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+                        final ModelUser modelUser = documentSnapshot.toObject(ModelUser.class);
+                        modelUser.setId(documentSnapshot.getId());
                         holder.commentPic.setVisibility(View.GONE);
 
                         holder.commenter.setText(modelUser.getName());
@@ -98,6 +101,14 @@ public class AdapterFeedComment extends RecyclerView.Adapter<AdapterFeedComment.
                         }
                         Uri uri = Uri.parse(modelUser.getProPic());
                         glide.load(uri).into(holder.imgView_proPic);
+                        holder.imgView_proPic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(context, ProfileViewActivity.class);
+                                intent.putExtra("Uid", modelUser.getId());
+                                context.startActivity(intent);
+                            }
+                        });
                         holder.commentupvoteBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

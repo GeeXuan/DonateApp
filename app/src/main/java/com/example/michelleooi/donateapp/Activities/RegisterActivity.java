@@ -28,6 +28,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -41,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     static int REQUESCODE = 1;
     Uri pickedImgUri;
 
-    private EditText userEmail, userPassword, userPassword2, userName;
+    private EditText userEmail, userPassword, userPassword2, userName, userIC;
     private ProgressBar loadingProgress;
     private Button regBtn;
     private FirebaseFirestore db;
@@ -57,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.regPassword);
         userPassword2 = findViewById(R.id.regPassword2);
         userName = findViewById(R.id.regName);
+        userIC = findViewById(R.id.regIC);
         loadingProgress = findViewById(R.id.regProgressBar);
         regBtn = findViewById((R.id.regBtn));
 
@@ -75,15 +77,27 @@ public class RegisterActivity extends AppCompatActivity {
                 final String password = userPassword.getText().toString();
                 final String password2 = userPassword2.getText().toString();
                 final String name = userName.getText().toString();
+                final String ic = userIC.getText().toString();
                 final FirebaseUser user = mAuth.getCurrentUser();
 
 
-                if (email.isEmpty() || password.isEmpty() || !password.equals(password2) || name.isEmpty()) {
+                if (email.isEmpty() || password.isEmpty() || !password.equals(password2) || name.isEmpty() || ic.isEmpty() || ic.length() != 12) {
                     showMessage("Please verify ALL the fields !");
                     regBtn.setVisibility(View.VISIBLE);
                     loadingProgress.setVisibility(View.INVISIBLE);
                 } else {
-                    CreateUserAccount(email, name, password);
+                    db.collection("Users").whereEqualTo("ic", ic).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.getResult().isEmpty()) {
+                                CreateUserAccount(email, name, password, ic);
+                            } else {
+                                showMessage("User with this IC already existed!");
+                                regBtn.setVisibility(View.VISIBLE);
+                                loadingProgress.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
                 }
 
             }
@@ -106,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void CreateUserAccount(final String email, final String name, String password) {
+    private void CreateUserAccount(final String email, final String name, String password, final String ic) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -114,7 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     showMessage("Account created !");
                     CollectionReference userRef = db.collection("Users");
-                    modelUser = new ModelUser(mAuth.getCurrentUser().getUid(), email, name, "User");
+                    modelUser = new ModelUser(mAuth.getCurrentUser().getUid(), email, name, "User", ic);
                     userRef.add(modelUser).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {

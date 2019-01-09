@@ -85,7 +85,8 @@ public class CommentUploadPhotoDialog extends BottomSheetDialogFragment {
 
         } else if (requestCode == CAMERA_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Uri uri = Uri.parse(pictureImagePath);
+                File file = new File(pictureImagePath);
+                Uri uri = Uri.fromFile(file);
                 mListener.onButtonClicked(uri);
             }
         }
