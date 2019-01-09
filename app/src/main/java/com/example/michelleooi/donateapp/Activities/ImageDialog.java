@@ -1,6 +1,5 @@
-package com.example.michelleooi.donateapp;
+package com.example.michelleooi.donateapp.Activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -9,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
+import com.example.michelleooi.donateapp.R;
 
 public class ImageDialog extends AppCompatActivity
 {
