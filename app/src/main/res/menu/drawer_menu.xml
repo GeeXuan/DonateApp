@@ -6,16 +6,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_newsfeed"
-            android:title="Message" />
+            android:title="Feeds" />
         <item
             android:id="@+id/nav_event"
-            android:title="Event" />
+            android:title="Donation" />
 
         <item android:title="Staff">
             <menu>
                 <item
-                    android:id="@+id/nav_share"
-                    android:title="Share" />
+                    android:id="@+id/nav_approve"
+                    android:title="Approve Donation" />
             </menu>
         </item>
     </group>

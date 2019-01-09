@@ -35,7 +35,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDialog.BottomSheetListener {
@@ -92,7 +91,6 @@ public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDi
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     final CollectionReference modelFeedRef = db.collection("Feeds");
                     String text = feedAddPostText.getText().toString();
-                    final HashMap data = new HashMap<>();
                     final ModelFeed modelFeed = new ModelFeed(0, 0, 0, "Active", text, mAuth.getUid(), new Date(), area);
                     final ArrayList<String> downloadUrl = new ArrayList<>();
                     if (uriArrayList != null && !uriArrayList.isEmpty()) {
@@ -150,6 +148,7 @@ public class PostFeedActivity extends AppCompatActivity implements UploadPhotoDi
     @Override
     public void onButtonClicked(ArrayList<Uri> uriArrayList) {
         sliderDotspanel.removeAllViews();
+        dotscount = 0;
         if (!uriArrayList.isEmpty()) {
             this.uriArrayList = uriArrayList;
             AdapterFeedImage adapterFeedImage = new AdapterFeedImage(this, uriArrayList);

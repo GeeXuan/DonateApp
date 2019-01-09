@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -251,6 +252,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        ImageButton feedMoreButton;
         TextView feedUserName, feedPostDate, feedUpvoteAmount, feedDownvoteAmount, feedCommentAmount, feedText;
         ImageView imgView_proPic, feedUpvoteImage, feedDownvoteImage;
         ViewPager viewPager;
@@ -266,7 +268,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
             imgView_proPic = (ImageView) itemView.findViewById(R.id.feedProPic);
             feedUpvoteImage = (ImageView) itemView.findViewById(R.id.feedUpvoteImage);
             feedDownvoteImage = (ImageView) itemView.findViewById(R.id.feedDownvoteImage);
-
+            feedMoreButton = itemView.findViewById(R.id.feedMoreButton);
             viewPager = (ViewPager) itemView.findViewById(R.id.viewPager);
             sliderDotspanel = (LinearLayout) itemView.findViewById(R.id.SliderDots);
             feedUserName = (TextView) itemView.findViewById(R.id.feedUserName);
