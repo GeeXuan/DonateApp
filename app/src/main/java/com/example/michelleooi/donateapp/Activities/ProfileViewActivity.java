@@ -36,6 +36,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private ModelUser modelUser;
     private final static int UPDATEPROFILE = 5;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private TextView editProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,10 @@ public class ProfileViewActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                 modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
-                if(modelUser.getId().equals(mAuth.getUid()))
+                if(!modelUser.getId().equals(mAuth.getUid())){
+                    editProfile=findViewById(R.id.editProfile);
+                    editProfile.setVisibility(View.GONE);
+                }
                 if (modelUser.getProPic() != null) {
                     Uri userProPic = Uri.parse(modelUser.getProPic());
                     ImageView mUserProPic = (ImageView) findViewById(R.id.userProPic);

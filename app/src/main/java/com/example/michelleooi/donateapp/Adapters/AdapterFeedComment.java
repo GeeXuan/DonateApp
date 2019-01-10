@@ -99,9 +99,10 @@ public class AdapterFeedComment extends RecyclerView.Adapter<AdapterFeedComment.
                         } else {
                             holder.comments.setVisibility(View.GONE);
                         }
-                        Uri uri = Uri.parse(modelUser.getProPic());
-                        if (modelUser.getProPic() != null && !modelUser.getProPic().isEmpty())
-                            glide.load(uri).into(holder.imgView_proPic);
+                        Uri uri;
+                        if (modelUser.getProPic() != null && !modelUser.getProPic().isEmpty()){
+                            uri = Uri.parse(modelUser.getProPic());
+                            glide.load(uri).into(holder.imgView_proPic);}
                         holder.imgView_proPic.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

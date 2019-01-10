@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
+                                            mAuth.signOut();
                                             Toast.makeText(LoginActivity.this, "Verification email sent !", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(LoginActivity.this, "Failed to send verification email !", Toast.LENGTH_SHORT).show();

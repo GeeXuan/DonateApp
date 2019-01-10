@@ -86,10 +86,10 @@ public class RegisterActivity extends AppCompatActivity {
                     regBtn.setVisibility(View.VISIBLE);
                     loadingProgress.setVisibility(View.INVISIBLE);
                 } else {
-                    db.collection("Users").whereEqualTo("ic", ic).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    db.collection("Users").whereEqualTo("ic", ic).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.getResult().isEmpty()) {
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (queryDocumentSnapshots.isEmpty()) {
                                 CreateUserAccount(email, name, password, ic);
                             } else {
                                 showMessage("User with this IC already existed!");
@@ -133,8 +133,27 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             if (pickedImgUri == null) {
-                                mAuth.signOut();
-                                updateUI();
+                                FirebaseUser currentUser = mAuth.getCurrentUser();
+                                UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name)
+                                        .build();
+                                currentUser.updateProfile(profileUpdate)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentReference userRef = db.collection("Users").document(modelUser.getId());
+                                                    userRef.set(modelUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            showMessage("Register Completed !");
+                                                            mAuth.signOut();
+                                                            updateUI();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
                             } else
                                 updateUserInfo(name, pickedImgUri, mAuth.getCurrentUser());
                         }
@@ -150,7 +169,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void updateUserInfo(final String name, Uri pickedImgUri, final FirebaseUser currentUser) {
 
-        if (pickedImgUri!=null){
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("users_photos");
         final StorageReference imageFilePath = mStorage.child(UUID.randomUUID().toString());
         imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -186,28 +204,6 @@ public class RegisterActivity extends AppCompatActivity {
                 });
             }
         });
-        }else{
-            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build();
-            currentUser.updateProfile(profileUpdate)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                DocumentReference userRef = db.collection("Users").document(modelUser.getId());
-                                userRef.set(modelUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        showMessage("Register Completed !");
-                                        mAuth.signOut();
-                                        updateUI();
-                                    }
-                                });
-                            }
-                        }
-                    });
-        }
     }
 
     private void updateUI() {
