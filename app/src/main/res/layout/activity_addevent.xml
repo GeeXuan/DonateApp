@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.Dialog">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/eventTitleInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ems="10"
+                    android:hint="Enter Your Title"
+                    android:inputType="text|textCapSentences"
+                    android:maxLength="50"
+                    android:scrollbars="vertical" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/eventNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventTitleInput"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/eventName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ems="10"
+                    android:hint="Enter Event Name"
+                    android:inputType="text|textCapSentences"
+                    android:maxLength="50"
+                    android:scrollbars="vertical" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/eventDescriptionInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventNameInput"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="300"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/eventDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ems="10"
+                    android:hint="Description"
+                    android:inputType="textMultiLine|textImeMultiLine"
+                    android:maxLength="300"
+                    android:maxLines="5"
+                    android:scrollbars="vertical" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/eventGoalInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventDescriptionInput"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="250"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/eventGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="10"
+                    android:hint="Enter Amount Goal"
+                    android:inputType="numberDecimal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_below="@+id/eventGoalInput"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/SliderDots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/viewPager"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal" />
+
+            <Button
+                android:id="@+id/btn_Add_Images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/viewPager"
+                android:layout_marginTop="8dp"
+                android:padding="10dp"
+                android:text="Add Images" />
+
+            <Button
+                android:id="@+id/Btn_Submit_Event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_Add_Images"
+                android:layout_marginTop="8dp"
+                android:padding="10dp"
+                android:text="Submit" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

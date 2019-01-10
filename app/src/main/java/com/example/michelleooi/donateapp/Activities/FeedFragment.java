@@ -1,26 +1,42 @@
 package com.example.michelleooi.donateapp.Activities;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import com.example.michelleooi.donateapp.Adapters.AdapterFeed;
 import com.example.michelleooi.donateapp.Models.ModelFeed;
 import com.example.michelleooi.donateapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class FeedFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    private final static int POST_ACTIVITY = 5;
     ArrayList<ModelFeed> modelFeedArrayList = new ArrayList<>();
-    AdapterFeed adapterFeed;
+    Button btnPostFeed;
+    SwipeRefreshLayout swipeLayout;
+    TextView emptyText;
+    RelativeLayout container;
+    Spinner spinner;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,40 +46,109 @@ public class FeedFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).setActionBarTitle("News Feed");
 
-        recyclerView = getActivity().findViewById(R.id.feedrecyclerView);
-//        RelativeLayout commentBtn = getActivity().findViewById(R.id.row_commentbtn);
-//        commentBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getActivity(), PopComment.class));
-//            }
-//        });
+        container = getActivity().findViewById(R.id.container);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        spinner = (Spinner) getActivity().findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.areas, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+                bundle.putString("area", adapterView.getItemAtPosition(i).toString());
+                bundle.putString("direction", "descending");
+                FeedTab feedTab = new FeedTab();
+                feedTab.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, feedTab)
+                        .commit();
+            }
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapterFeed = new AdapterFeed(getActivity(), modelFeedArrayList);
-        recyclerView.setAdapter(adapterFeed);
-
-        populateRecyclerView();
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Bundle bundle = new Bundle();
+                bundle.putString("area", spinner.getSelectedItem().toString());
+                bundle.putString("direction", "descending");
+                FeedTab feedTab = new FeedTab();
+                feedTab.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, feedTab)
+                        .commit();
+            }
+        });
     }
 
-
-    public void populateRecyclerView() {
-
-        ModelFeed modelFeed = new ModelFeed(1, 9, 2, R.drawable.ic_propic1, R.drawable.img_post1,
-                "Sajin Maharjan", "2 hrs", "The cars we drive say a lot about us.");
-        modelFeedArrayList.add(modelFeed);
-        modelFeed = new ModelFeed(2, 26, 6, R.drawable.ic_propic2, 0,
-                "Karun Shrestha", "9 hrs", "Don't be afraid of your fears. They're not there to scare you. They're there to \n" +
-                "let you know that something is worth it.");
-        modelFeedArrayList.add(modelFeed);
-        modelFeed = new ModelFeed(3, 17, 5, R.drawable.ic_propic3, R.drawable.img_post2,
-                "Lakshya Ram", "13 hrs", "That reflection!!!");
-        modelFeedArrayList.add(modelFeed);
-
-        adapterFeed.notifyDataSetChanged();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item1 = menu.add(Menu.NONE, 999, 1, "Add Post");
+        item1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        item1.setIcon(R.drawable.ic_add_white_24dp);
+        MenuItem item2 = menu.add(Menu.NONE, 998, 2, "Sort By");
+        item2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        item2.setIcon(R.drawable.ic_sort_white_24dp);
+        super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_logout:
+                FirebaseAuth.getInstance().signOut();
+                getActivity().finish();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                break;
+            case 998:
+                final Bundle bundle = new Bundle();
+                bundle.putString("area", spinner.getSelectedItem().toString());
+                final FeedTab feedTab = new FeedTab();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Sort By");
+                builder.setItems(new String[]{"New To Old", "Old To New"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0) {
+                            bundle.putString("direction", "descending");
+                        } else {
+                            bundle.putString("direction", "ascending");
+                        }
+                        feedTab.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, feedTab)
+                                .commit();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, feedTab)
+                                .commit();
+                    }
+                });
+                builder.show();
+                break;
+            case 999:
+                startActivityForResult(new Intent(getActivity(), PostFeedActivity.class), POST_ACTIVITY);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == POST_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle bundle = new Bundle();
+                bundle.putString("area", spinner.getSelectedItem().toString());
+                FeedTab feedTab = new FeedTab();
+                bundle.putString("direction", "descending");
+                feedTab.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, feedTab)
+                        .commit();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

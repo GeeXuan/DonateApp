@@ -18,6 +18,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/userphoto"
+        android:contentDescription="@string/loginPhoto"
         app:layout_constraintBottom_toTopOf="@+id/loginMail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,14 +36,12 @@
         android:layout_width="265dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/reg_edittext_style"
         android:ems="10"
-        android:hint="Mail"
-        android:inputType="textPersonName"
+        android:hint="@string/mail"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -58,11 +57,26 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/reg_edittext_style"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginMail" />
+
+    <TextView
+        android:id="@+id/tvVerify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/verifymail"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/loginProgress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
 
     <Button
         android:id="@+id/loginBtn"
@@ -75,7 +89,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="7dp"
         android:background="@drawable/reg_btn_style"
-        android:text="Login"
+        android:text="@string/login"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,4 +105,18 @@
         app:layout_constraintEnd_toEndOf="@+id/loginBtn"
         app:layout_constraintStart_toStartOf="@+id/loginBtn"
         app:layout_constraintTop_toTopOf="@+id/loginBtn" />
+
+    <TextView
+        android:id="@+id/tvReg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/icon"
+        app:layout_constraintBottom_toTopOf="@+id/loginMail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPhoto" />
 </android.support.constraint.ConstraintLayout>

@@ -3,6 +3,8 @@
     package="com.example.michelleooi.donateapp">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.RegisterActivity">
-
-        </activity>
-        <activity android:name=".Activities.HomeActivity" />
-        <activity android:name=".Activities.PopComment"
-            android:theme="@style/AppTheme.CustomTheme">
-
+        <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".Activities.ApproveEventActivity" />
+        <activity android:name=".Activities.UpdateActivity" />
+        <activity android:name=".Activities.EventDetailsActivity" />
+        <activity android:name=".Activities.ProfileViewActivity" />
+        <activity android:name=".Activities.AddEventActivity" />
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".Activities.FeedCommentActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".Activities.PostFeedActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity" />
         </activity>
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
@@ -27,6 +38,23 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

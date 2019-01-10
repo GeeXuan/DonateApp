@@ -10,19 +10,20 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"        />
+        android:id="@+id/userProPic"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@mipmap/ic_launcher_round" />
 
     <TextView
+        android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Coding in Flow"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
     <TextView
+        android:id="@+id/userEmail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="info@codingflow.com"/>
+        android:layout_height="wrap_content" />
 </LinearLayout>

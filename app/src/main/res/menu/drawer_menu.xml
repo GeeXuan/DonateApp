@@ -4,16 +4,11 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_newsfeed"
-            android:title="Message"/>
-        <item android:id="@+id/nav_event"
-            android:title="Event"/>
+        <item
+            android:id="@+id/nav_newsfeed"
+            android:title="Feeds" />
+        <item
+            android:id="@+id/nav_event"
+            android:title="Donation" />
     </group>
-
-    <item android:title="Staff">
-        <menu>
-            <item android:id="@+id/nav_share"
-                android:title="Share"/>
-        </menu>
-    </item>
 </menu>

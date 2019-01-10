@@ -1,14 +1,15 @@
 package com.example.michelleooi.donateapp.Activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.michelleooi.donateapp.R;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Intent homeActivity;
     private ImageView loginPhoto;
+    private FirebaseUser user;
+    private TextView tvVerify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         homeActivity = new Intent(this, HomeActivity.class);
         loginPhoto = findViewById(R.id.loginPhoto);
+        tvVerify = findViewById(R.id.tvVerify);
         loginPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,16 +59,15 @@ public class LoginActivity extends AppCompatActivity {
                 loginProgress.setVisibility(View.VISIBLE);
                 btnLogin.setVisibility(View.INVISIBLE);
 
-                final String mail = userMail.getText().toString();
+
+                final String mail = userMail.getText().toString().trim();
                 final String password = userPassword.getText().toString();
 
                 if (mail.isEmpty() || password.isEmpty()) {
                     showMessage("Please verify ALL the fields !");
                     loginProgress.setVisibility(View.INVISIBLE);
                     btnLogin.setVisibility(View.VISIBLE);
-                }
-
-                else {
+                } else {
                     signIn(mail, password);
                 }
             }
@@ -75,13 +78,31 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(mail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
+                    user = mAuth.getCurrentUser();
                     loginProgress.setVisibility(View.INVISIBLE);
                     btnLogin.setVisibility(View.VISIBLE);
-                    updateUI();
-                }
-
-                else {
+                    if (user.isEmailVerified()) {
+                        updateUI();
+                    } else {
+                        tvVerify.setVisibility(View.VISIBLE);
+                        tvVerify.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(LoginActivity.this, "Verification email sent !", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Failed to send verification email !", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                } else {
                     showMessage(task.getException().getMessage());
                     loginProgress.setVisibility(View.INVISIBLE);
                     btnLogin.setVisibility(View.VISIBLE);
