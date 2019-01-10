@@ -35,6 +35,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private String Uid;
     private ModelUser modelUser;
     private final static int UPDATEPROFILE = 5;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(0);
         Uid = getIntent().getStringExtra("Uid");
         showUser();
 
@@ -76,6 +78,7 @@ public class ProfileViewActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                 modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
+                if(modelUser.getId().equals(mAuth.getUid()))
                 if (modelUser.getProPic() != null) {
                     Uri userProPic = Uri.parse(modelUser.getProPic());
                     ImageView mUserProPic = (ImageView) findViewById(R.id.userProPic);

@@ -46,7 +46,7 @@ public class DonateHistoryTab extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         userid = getArguments().getString("userid");
-        donateHistoryRecyclerView = getActivity().findViewById(R.id.feedHistoryRecyclerView);
+        donateHistoryRecyclerView = getActivity().findViewById(R.id.paymentRecyclerView);
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         donateHistoryRecyclerView.setLayoutManager(layoutManager);

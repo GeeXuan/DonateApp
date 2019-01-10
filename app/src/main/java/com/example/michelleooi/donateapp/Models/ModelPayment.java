@@ -7,6 +7,10 @@ public class ModelPayment {
     double amount;
     Date date;
 
+    public ModelPayment(){
+
+    }
+
     public ModelPayment(String userid, String eventid, String status, Date date, double amount) {
         this.userid = userid;
         this.eventid = eventid;

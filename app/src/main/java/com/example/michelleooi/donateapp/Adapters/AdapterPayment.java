@@ -42,24 +42,24 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.MyViewHo
     @Override
     public AdapterPayment.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_feed, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_payment, parent, false);
         AdapterPayment.MyViewHolder viewHolder = new AdapterPayment.MyViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        ModelPayment modelPayment = modelPaymentArrayList.get(position);
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+        final ModelPayment modelPayment = modelPaymentArrayList.get(position);
         db.collection("Events").document(modelPayment.getEventid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 modelEvent = documentSnapshot.toObject(ModelEvent.class);
+                holder.eventName.setText("Event: " + modelEvent.getName());
+                holder.donateDate.setText("Date: " + modelPayment.getDate().toString());
+                holder.amount.setText(String.format("Amount: RM%2f", modelPayment.getAmount()));
             }
         });
-        holder.eventName.setText("Event: " + modelEvent.getName());
-        holder.donateDate.setText("Date: " + modelPayment.getDate().toString());
-        holder.amount.setText(String.format("Amount: RM%2f", modelPayment.getAmount()));
     }
 
     @Override

@@ -98,48 +98,78 @@ public class UpdateActivity extends AppCompatActivity {
         progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
         progress.show();
 
-        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("users_photos");
-        final StorageReference imageFilePath = mStorage.child(pickedImgUri.getLastPathSegment());
-        imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        if (pickedImgUri!=null) {
+            StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("users_photos");
+            final StorageReference imageFilePath = mStorage.child(pickedImgUri.getLastPathSegment());
+            imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(final Uri uri) {
-                        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .setPhotoUri(uri)
-                                .build();
+                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(final Uri uri) {
+                            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .setPhotoUri(uri)
+                                    .build();
 
-                        currentUser.updateProfile(profileUpdate)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            db.collection("Users").whereEqualTo("id", currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                    ModelUser modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
-                                                    modelUser.setName(name);
-                                                    modelUser.setProPic(uri.toString());
-                                                    db.collection("Users").document(currentUser.getUid()).set(modelUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            progress.dismiss();
-                                                            showMessage("Update Successful !");
-                                                            updateUI();
-                                                        }
-                                                    });
-                                                }
-                                            });
+                            currentUser.updateProfile(profileUpdate)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                db.collection("Users").whereEqualTo("id", currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        ModelUser modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
+                                                        modelUser.setName(name);
+                                                        modelUser.setProPic(uri.toString());
+                                                        db.collection("Users").document(currentUser.getUid()).set(modelUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                progress.dismiss();
+                                                                showMessage("Update Successful !");
+                                                                updateUI();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
                                         }
+                                    });
+                        }
+                    });
+                }
+            });
+        }else{
+            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(name)
+                    .build();
+
+            currentUser.updateProfile(profileUpdate)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                db.collection("Users").whereEqualTo("id", currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        ModelUser modelUser = queryDocumentSnapshots.getDocuments().get(0).toObject(ModelUser.class);
+                                        modelUser.setName(name);
+                                        db.collection("Users").document(currentUser.getUid()).set(modelUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                progress.dismiss();
+                                                showMessage("Update Successful !");
+                                                updateUI();
+                                            }
+                                        });
                                     }
                                 });
-                    }
-                });
-            }
-        });
+                            }
+                        }
+                    });
+        }
     }
 
     private void updateUI() {

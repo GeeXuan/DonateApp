@@ -150,6 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void updateUserInfo(final String name, Uri pickedImgUri, final FirebaseUser currentUser) {
 
+        if (pickedImgUri!=null){
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("users_photos");
         final StorageReference imageFilePath = mStorage.child(UUID.randomUUID().toString());
         imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -185,6 +186,28 @@ public class RegisterActivity extends AppCompatActivity {
                 });
             }
         });
+        }else{
+            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+            currentUser.updateProfile(profileUpdate)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                DocumentReference userRef = db.collection("Users").document(modelUser.getId());
+                                userRef.set(modelUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        showMessage("Register Completed !");
+                                        mAuth.signOut();
+                                        updateUI();
+                                    }
+                                });
+                            }
+                        }
+                    });
+        }
     }
 
     private void updateUI() {

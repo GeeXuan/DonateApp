@@ -120,9 +120,10 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
                                 context.startActivity(intent);
                             }
                         });
-                        Uri uri = Uri.parse(modelUser.getProPic());
-                        if (modelUser.getProPic() != null && !modelUser.getProPic().isEmpty())
-                            glide.load(uri).into(holder.imgView_proPic);
+                        Uri uri;
+                        if (modelUser.getProPic() != null && !modelUser.getProPic().isEmpty()){
+                            uri = Uri.parse(modelUser.getProPic());
+                            glide.load(uri).into(holder.imgView_proPic);}
                         holder.imgView_proPic.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -241,7 +242,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.MyViewHolder> 
         holder.feedUpvoteAmount.setText("");
         holder.feedDownvoteAmount.setText("");
         holder.feedCommentAmount.setText("");
-        holder.imgView_proPic.setImageDrawable(null);
+        holder.imgView_proPic.setImageResource(R.mipmap.ic_launcher_round);
         holder.sliderDotspanel.setVisibility(View.GONE);
         holder.feedDownvoteImage.setImageResource(R.drawable.ic_thumb_down_black_24dp);
         holder.feedDownvoteAmount.setTextColor(Color.parseColor("#000000"));
