@@ -129,9 +129,9 @@ public class RegisterActivity extends AppCompatActivity {
                     showMessage("Account created !");
                     CollectionReference userRef = db.collection("Users");
                     modelUser = new ModelUser(mAuth.getCurrentUser().getUid(), email, name, "User", ic);
-                    userRef.add(modelUser).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    userRef.document(mAuth.getUid()).set(modelUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                        public void onSuccess(Void aVoid) {
                             if (pickedImgUri == null) {
                                 mAuth.signOut();
                                 updateUI();
