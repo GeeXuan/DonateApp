@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/eventDescription"
                 android:layout_alignParentBottom="true"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/reg_btn_style"
                 android:text="@string/approve" />
         </RelativeLayout>
     </ScrollView>
