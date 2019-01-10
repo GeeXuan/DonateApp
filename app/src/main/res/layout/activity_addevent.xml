@@ -132,6 +132,7 @@
 
             <Button
                 android:id="@+id/btn_Add_Images"
+                android:background="@drawable/reg_btn_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/viewPager"
@@ -141,6 +142,7 @@
 
             <Button
                 android:id="@+id/Btn_Submit_Event"
+                android:background="@drawable/reg_btn_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/btn_Add_Images"
