@@ -79,7 +79,7 @@ public class DonateHistoryTab extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Failed To Load Feeds", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Loading Failed", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
