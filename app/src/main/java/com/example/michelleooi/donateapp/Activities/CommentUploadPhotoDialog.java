@@ -62,17 +62,26 @@ public class CommentUploadPhotoDialog extends BottomSheetDialogFragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date timestamp = new Date();
-                String timestampString = new SimpleDateFormat("yyyyMMdd_HHmmss").format(timestamp);
-                String imageFileName = timestampString + ".jpg";
-                File storageDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
-                pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
-                File file = new File(pictureImagePath);
-                Uri outputFileUri = Uri.fromFile(file);
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                startActivityForResult(intent, CAMERA_REQUEST);
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.CAMERA)) {
+                        Toast.makeText(getActivity(), "Please accept for required permission !", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 3);
+                    }
+                } else {
+                    Date timestamp = new Date();
+                    String timestampString = new SimpleDateFormat("yyyyMMdd_HHmmss").format(timestamp);
+                    String imageFileName = timestampString + ".jpg";
+                    File storageDir = Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES);
+                    pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+                    File file = new File(pictureImagePath);
+                    Uri outputFileUri = Uri.fromFile(file);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                    startActivityForResult(intent, CAMERA_REQUEST);
+                }
             }
         });
         return view;
